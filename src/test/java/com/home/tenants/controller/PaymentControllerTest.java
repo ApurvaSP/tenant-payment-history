@@ -36,7 +36,7 @@ public class PaymentControllerTest {
         PaymentDAO createdPaymentDAO = mock(PaymentDAO.class);
         PaymentDTO responsePaymentDTO = mock(PaymentDTO.class);
 
-        when(paymentMapper.makePaymentDO(requestPaymentDTO)).thenReturn(toBeCreatedPaymentDAO);
+        when(paymentMapper.makePaymentDAO(requestPaymentDTO)).thenReturn(toBeCreatedPaymentDAO);
         when(paymentService.save(toBeCreatedPaymentDAO)).thenReturn(createdPaymentDAO);
         when(paymentMapper.makePaymentDTO(createdPaymentDAO)).thenReturn(responsePaymentDTO);
 
@@ -49,7 +49,7 @@ public class PaymentControllerTest {
         PaymentDTO requestPaymentDTO = mock(PaymentDTO.class);
         PaymentDAO toBeCreatedPaymentDAO = mock(PaymentDAO.class);
 
-        when(paymentMapper.makePaymentDO(requestPaymentDTO)).thenReturn(toBeCreatedPaymentDAO);
+        when(paymentMapper.makePaymentDAO(requestPaymentDTO)).thenReturn(toBeCreatedPaymentDAO);
         when(paymentService.save(toBeCreatedPaymentDAO)).thenThrow(ConstraintsViolationException.class);
         paymentController.create(requestPaymentDTO);
     }

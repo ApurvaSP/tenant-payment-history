@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PaymentMapper {
 
-    public PaymentDAO makePaymentDO(PaymentDTO paymentDto) {
+    public PaymentDAO makePaymentDAO(PaymentDTO paymentDto) {
         PaymentDAO paymentDAO = new PaymentDAO(
                 paymentDto.getContractId(),
                 paymentDto.getValue(),

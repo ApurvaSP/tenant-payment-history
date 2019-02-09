@@ -23,7 +23,7 @@ public class PaymentController {
 
 	@PostMapping
 	public PaymentDTO create(@Valid @RequestBody PaymentDTO paymentDto) throws ConstraintsViolationException {
-		PaymentDAO paymentDAO = paymentService.save(paymentMapper.makePaymentDO(paymentDto));
+		PaymentDAO paymentDAO = paymentService.save(paymentMapper.makePaymentDAO(paymentDto));
 		return paymentMapper.makePaymentDTO(paymentDAO);
 	}
 

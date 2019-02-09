@@ -38,7 +38,7 @@ public class PaymentControllerIntegrationTest {
     }
 
     @Test
-    public void testCreateCar() {
+    public void testCreatePayment() {
         int paymentId =
                 given()
                         .contentType(ContentType.JSON)
@@ -59,7 +59,7 @@ public class PaymentControllerIntegrationTest {
     }
 
     @Test
-    public void testCreateCarShouldFailIfContractIdIsNull() {
+    public void testCreatePaymentFailureIfContractIdIsNull() {
         given()
                 .contentType(ContentType.JSON)
                 .body(paymentRequest("Rent paid", null)).
@@ -70,7 +70,7 @@ public class PaymentControllerIntegrationTest {
     }
 
     @Test
-    public void testCreateCarShouldFailIfDescriptionIsNull() {
+    public void testCreatePaymentFailureShouldFailIfDescriptionIsNull() {
         given()
                 .contentType(ContentType.JSON)
                 .body(paymentRequest(null, 1234L)).
@@ -81,7 +81,7 @@ public class PaymentControllerIntegrationTest {
     }
 
     @Test
-    public void testCreateCarShouldFailIfDescriptionIsEmpty() {
+    public void testCreatePaymentFailureIfDescriptionIsEmpty() {
         given()
                 .contentType(ContentType.JSON)
                 .body(paymentRequest("", 1234L)).

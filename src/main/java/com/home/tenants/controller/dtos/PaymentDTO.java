@@ -24,10 +24,6 @@ public class PaymentDTO {
         this.isDeleted = isDeleted;
     }
 
-    public PaymentDTO(Long contractId, Integer value, String description, Date time, Date createdAt, Date updatedAt, Boolean isImported, Boolean isDeleted) {
-        this(null, contractId, value, description, time, createdAt, updatedAt, isImported, isDeleted);
-    }
-
     private Long id;
 
     @NotNull
