@@ -26,4 +26,10 @@ public class PaymentService {
             throw new ConstraintsViolationException(dive.getMessage());
         }
     }
+
+    public PaymentDAO get(long paymentId) throws EntityNotFoundException {
+        return paymentRepository.findById(paymentId).
+                orElseThrow(() -> new EntityNotFoundException("Could not find entity with id: " + paymentId));
+
+    }
 }
