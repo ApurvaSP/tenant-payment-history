@@ -32,4 +32,9 @@ public class PaymentController {
 		PaymentDAO paymentDAO = paymentService.get(paymentId);
 		return paymentMapper.makePaymentDTO(paymentDAO);
 	}
+
+	@DeleteMapping("/{paymentId}")
+	public void delete(@PathVariable long paymentId) throws EntityNotFoundException {
+		paymentService.delete(paymentId);
+	}
 }

@@ -2,6 +2,7 @@ package com.home.tenants.controller;
 
 import com.home.tenants.TenantsApplication;
 import com.home.tenants.repository.PaymentRepository;
+import com.home.tenants.repository.daos.PaymentDAO;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.Before;
@@ -20,6 +21,7 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -109,6 +111,29 @@ public class PaymentControllerIntegrationTest {
     public void testGetPaymentFailureWithInvalidId() {
         when()
                 .get("/payments/13232")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    public void testDeletePayment() {
+        Date current = new Date();
+        PaymentDAO payment = new PaymentDAO(1234L, 100, "Rent Paid",current, current, current, false );
+        paymentRepository.save(payment);
+
+        given()
+                .pathParam("paymentId", payment.getId()).
+        when()
+                .delete("/payments/{paymentId}")
+                .then()
+                .statusCode(200);
+        assertTrue(paymentRepository.findById(payment.getId()).get().getIsDeleted());
+    }
+
+    @Test
+    public void testDeletePaymentFailureWithInvalidId() {
+        when()
+                .delete("/payments/13232")
                 .then()
                 .statusCode(400);
     }

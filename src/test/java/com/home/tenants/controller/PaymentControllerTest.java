@@ -13,8 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PaymentControllerTest {
@@ -70,6 +69,18 @@ public class PaymentControllerTest {
     public void testGetPaymentFailure() throws EntityNotFoundException {
         when(paymentService.get(1234L)).thenThrow(EntityNotFoundException.class);
         paymentController.get(1234L);
+    }
+
+    @Test
+    public void testDeletePayment() throws EntityNotFoundException {
+        paymentController.delete(1234L);
+        verify(paymentService).delete(1234L);
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testDeletePaymentFailure() throws EntityNotFoundException {
+        doThrow(EntityNotFoundException.class).when(paymentService).delete(1234L);
+        paymentController.delete(1234L);
     }
 
 }

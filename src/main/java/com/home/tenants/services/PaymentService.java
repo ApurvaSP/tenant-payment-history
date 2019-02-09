@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class PaymentService {
 
@@ -18,6 +20,7 @@ public class PaymentService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PaymentService.class);
 
+    @Transactional
     public PaymentDAO save(PaymentDAO payment) throws ConstraintsViolationException {
         try {
             return paymentRepository.save(payment);
@@ -27,12 +30,14 @@ public class PaymentService {
         }
     }
 
+    @Transactional
     public PaymentDAO get(long paymentId) throws EntityNotFoundException {
         return paymentRepository.findById(paymentId).
                 orElseThrow(() -> new EntityNotFoundException("Could not find entity with id: " + paymentId));
 
     }
 
+    @Transactional
     public void delete(long paymentId) throws EntityNotFoundException {
         PaymentDAO paymentDAO = get(paymentId);
         paymentDAO.setIsDeleted(true);
