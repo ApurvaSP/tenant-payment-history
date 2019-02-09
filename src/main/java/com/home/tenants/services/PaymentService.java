@@ -32,4 +32,9 @@ public class PaymentService {
                 orElseThrow(() -> new EntityNotFoundException("Could not find entity with id: " + paymentId));
 
     }
+
+    public void delete(long paymentId) throws EntityNotFoundException {
+        PaymentDAO paymentDAO = get(paymentId);
+        paymentDAO.setIsDeleted(true);
+    }
 }

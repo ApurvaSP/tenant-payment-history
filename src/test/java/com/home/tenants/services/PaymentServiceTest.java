@@ -15,8 +15,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PaymentServiceTest {
@@ -56,9 +55,22 @@ public class PaymentServiceTest {
 
     @Test(expected = EntityNotFoundException.class)
     public void testGetPaymentFailure() throws EntityNotFoundException {
-        PaymentDAO paymentDAO = mock(PaymentDAO.class);
         when(paymentRepository.findById(1234L)).thenReturn(Optional.empty());
         paymentService.get(1234L);
+    }
+
+    @Test
+    public void testDeletePayment() throws EntityNotFoundException {
+        PaymentDAO paymentDAO = mock(PaymentDAO.class);
+        when(paymentRepository.findById(1234L)).thenReturn(Optional.of(paymentDAO));
+        paymentService.delete(1234L);
+        verify(paymentDAO).setIsDeleted(true);
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testDeletePaymentFailure() throws EntityNotFoundException {
+        when(paymentRepository.findById(1234L)).thenReturn(Optional.empty());
+        paymentService.delete(1234L);
     }
 
 
