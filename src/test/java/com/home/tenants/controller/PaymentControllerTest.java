@@ -1,0 +1,56 @@
+package com.home.tenants.controller;
+
+import com.home.tenants.controller.dtos.PaymentDTO;
+import com.home.tenants.controller.mapper.PaymentMapper;
+import com.home.tenants.exceptions.ConstraintsViolationException;
+import com.home.tenants.repository.daos.PaymentDAO;
+import com.home.tenants.services.PaymentService;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
+public class PaymentControllerTest {
+
+    @Mock
+    private PaymentService paymentService;
+
+    @Mock
+    private PaymentMapper paymentMapper;
+
+    @InjectMocks
+    private PaymentController paymentController;
+
+    @Test
+    public void testCreatePayment() throws ConstraintsViolationException {
+
+        PaymentDTO requestPaymentDTO = mock(PaymentDTO.class);
+        PaymentDAO toBeCreatedPaymentDAO = mock(PaymentDAO.class);
+        PaymentDAO createdPaymentDAO = mock(PaymentDAO.class);
+        PaymentDTO responsePaymentDTO = mock(PaymentDTO.class);
+
+        when(paymentMapper.makePaymentDO(requestPaymentDTO)).thenReturn(toBeCreatedPaymentDAO);
+        when(paymentService.save(toBeCreatedPaymentDAO)).thenReturn(createdPaymentDAO);
+        when(paymentMapper.makePaymentDTO(createdPaymentDAO)).thenReturn(responsePaymentDTO);
+
+        PaymentDTO actualPaymentDTO = paymentController.create(requestPaymentDTO);
+        assertEquals(actualPaymentDTO, responsePaymentDTO);
+    }
+
+    @Test(expected = ConstraintsViolationException.class)
+    public void testCreatePaymentShouldFail() throws ConstraintsViolationException {
+        PaymentDTO requestPaymentDTO = mock(PaymentDTO.class);
+        PaymentDAO toBeCreatedPaymentDAO = mock(PaymentDAO.class);
+
+        when(paymentMapper.makePaymentDO(requestPaymentDTO)).thenReturn(toBeCreatedPaymentDAO);
+        when(paymentService.save(toBeCreatedPaymentDAO)).thenThrow(ConstraintsViolationException.class);
+        paymentController.create(requestPaymentDTO);
+    }
+
+}
