@@ -3,6 +3,7 @@ package com.home.tenants.controller;
 import com.home.tenants.controller.dtos.PaymentDTO;
 import com.home.tenants.controller.mapper.PaymentMapper;
 import com.home.tenants.exceptions.ConstraintsViolationException;
+import com.home.tenants.exceptions.EntityNotFoundException;
 import com.home.tenants.repository.daos.PaymentDAO;
 import com.home.tenants.services.PaymentService;
 import org.junit.Test;
@@ -44,13 +45,31 @@ public class PaymentControllerTest {
     }
 
     @Test(expected = ConstraintsViolationException.class)
-    public void testCreatePaymentShouldFail() throws ConstraintsViolationException {
+    public void testCreatePaymentFailure() throws ConstraintsViolationException {
         PaymentDTO requestPaymentDTO = mock(PaymentDTO.class);
         PaymentDAO toBeCreatedPaymentDAO = mock(PaymentDAO.class);
 
         when(paymentMapper.makePaymentDO(requestPaymentDTO)).thenReturn(toBeCreatedPaymentDAO);
         when(paymentService.save(toBeCreatedPaymentDAO)).thenThrow(ConstraintsViolationException.class);
         paymentController.create(requestPaymentDTO);
+    }
+
+    @Test
+    public void testGetPayment() throws EntityNotFoundException {
+        PaymentDAO existingPaymentDAO = mock(PaymentDAO.class);
+        PaymentDTO expectedPaymentDTO = mock(PaymentDTO.class);
+
+        when(paymentService.get(1234L)).thenReturn(existingPaymentDAO);
+        when(paymentMapper.makePaymentDTO(existingPaymentDAO)).thenReturn(expectedPaymentDTO);
+
+        PaymentDTO actualPaymentDTO = paymentController.get(1234L);
+        assertEquals(actualPaymentDTO, expectedPaymentDTO);
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testGetPaymentFailure() throws EntityNotFoundException {
+        when(paymentService.get(1234L)).thenThrow(EntityNotFoundException.class);
+        paymentController.get(1234L);
     }
 
 }

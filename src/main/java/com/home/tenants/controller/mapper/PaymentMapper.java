@@ -30,7 +30,8 @@ public class PaymentMapper {
                 paymentDAO.getTime(),
                 paymentDAO.getCreatedAt(),
                 paymentDAO.getUpdatedAt(),
-                paymentDAO.getIsImported()
+                paymentDAO.getIsImported(),
+                paymentDAO.getIsDeleted()
         );
         return paymentDTO;
     }

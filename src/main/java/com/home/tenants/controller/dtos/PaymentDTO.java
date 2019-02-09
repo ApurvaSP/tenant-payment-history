@@ -12,7 +12,7 @@ public class PaymentDTO {
 
     }
 
-    public PaymentDTO(Long id, Long contractId, Integer value, String description, Date time, Date createdAt, Date updatedAt, Boolean isImported) {
+    public PaymentDTO(Long id, Long contractId, Integer value, String description, Date time, Date createdAt, Date updatedAt, Boolean isImported, Boolean isDeleted) {
         this.id = id;
         this.contractId = contractId;
         this.value = value;
@@ -21,10 +21,11 @@ public class PaymentDTO {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.isImported = isImported;
+        this.isDeleted = isDeleted;
     }
 
-    public PaymentDTO(Long contractId, Integer value, String description, Date time, Date createdAt, Date updatedAt, Boolean isImported) {
-        this(null, contractId, value, description, time, createdAt, updatedAt, isImported);
+    public PaymentDTO(Long contractId, Integer value, String description, Date time, Date createdAt, Date updatedAt, Boolean isImported, Boolean isDeleted) {
+        this(null, contractId, value, description, time, createdAt, updatedAt, isImported, isDeleted);
     }
 
     private Long id;

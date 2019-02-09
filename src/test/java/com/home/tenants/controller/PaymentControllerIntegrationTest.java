@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertTrue;
@@ -86,6 +87,28 @@ public class PaymentControllerIntegrationTest {
                 .body(paymentRequest("", 1234L)).
                 when()
                 .post("/payments")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    public void testGetPayment() {
+        when()
+                .get("/payments/1")
+                .then()
+                .statusCode(200)
+                .body("id", is(1))
+                .body("contractId", is(17689))
+                .body("value", is(100))
+                .body("description", is("Rent payment"))
+                .body("isImported", is(false))
+                .body("isDeleted", is(false));
+    }
+
+    @Test
+    public void testGetPaymentFailureWithInvalidId() {
+        when()
+                .get("/payments/13232")
                 .then()
                 .statusCode(400);
     }
