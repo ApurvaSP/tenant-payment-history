@@ -3,6 +3,7 @@ package com.home.tenants.repository.daos;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Entity
@@ -11,19 +12,13 @@ import java.util.Date;
 )
 public class PaymentDAO {
 
-    public PaymentDAO(Long id, Long contractId, Integer value, String description, Date time, Date createdAt, Date updatedAt, Boolean isImported) {
+    public PaymentDAO(Long id, Long contractId, Integer value, String description, Date time, Boolean isImported) {
         this.id = id;
         this.contractId = contractId;
         this.value = value;
         this.description = description;
-        this.time = time;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.isImported = isImported;
-    }
-
-    public PaymentDAO(Long contractId, Integer value, String description, Date time, Date createdAt, Date updatedAt, Boolean isImported) {
-        this(null, contractId, value, description, time, createdAt, updatedAt, isImported);
+        this.time = time;
     }
 
     private PaymentDAO() {
@@ -49,11 +44,11 @@ public class PaymentDAO {
 
     @Column(nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private Date createdAt;
+    private Date createdAt = new Date();
 
     @Column(nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private Date updatedAt;
+    private Date updatedAt = new Date();
 
     @Column(nullable = false)
     private Boolean isImported = false;
@@ -93,6 +88,22 @@ public class PaymentDAO {
         this.description = description;
     }
 
+    public Boolean getIsImported() {
+        return isImported;
+    }
+
+    public void setIsImported(Boolean imported) {
+        isImported = imported;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
     public Date getTime() {
         return time;
     }
@@ -115,21 +126,5 @@ public class PaymentDAO {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public Boolean getIsImported() {
-        return isImported;
-    }
-
-    public void setgetIsImported(Boolean imported) {
-        isImported = imported;
-    }
-
-    public Boolean getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Boolean deleted) {
-        isDeleted = deleted;
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -117,8 +118,7 @@ public class PaymentControllerIntegrationTest {
 
     @Test
     public void testDeletePayment() {
-        Date current = new Date();
-        PaymentDAO payment = new PaymentDAO(1234L, 100, "Rent Paid",current, current, current, false );
+        PaymentDAO payment = new PaymentDAO(null,1234L, 100, "Rent Paid", new Date(), false );
         paymentRepository.save(payment);
 
         given()

@@ -9,12 +9,11 @@ public class PaymentMapper {
 
     public PaymentDAO makePaymentDAO(PaymentDTO paymentDto) {
         PaymentDAO paymentDAO = new PaymentDAO(
+                paymentDto.getId(),
                 paymentDto.getContractId(),
                 paymentDto.getValue(),
                 paymentDto.getDescription(),
                 paymentDto.getTime(),
-                paymentDto.getCreatedAt(),
-                paymentDto.getUpdatedAt(),
                 paymentDto.getIsImported()
         );
         return paymentDAO;

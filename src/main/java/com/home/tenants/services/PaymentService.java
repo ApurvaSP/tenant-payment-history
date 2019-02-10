@@ -24,7 +24,7 @@ public class PaymentService {
     public PaymentDAO save(PaymentDAO payment) throws ConstraintsViolationException {
         try {
             return paymentRepository.save(payment);
-        } catch(DataIntegrityViolationException dive) {
+        } catch (DataIntegrityViolationException dive) {
             LOG.warn("ConstraintsViolationException while creating a payment: {}", payment, dive);
             throw new ConstraintsViolationException(dive.getMessage());
         }

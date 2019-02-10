@@ -1,6 +1,7 @@
 package com.home.tenants.controller.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -41,18 +42,6 @@ public class PaymentDTO {
     private Boolean isDeleted;
 
 
-    public Date getTime() {
-        return time;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
     public Boolean getIsImported() {
         return isImported;
     }
@@ -75,5 +64,17 @@ public class PaymentDTO {
 
     public String getDescription() {
         return description;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 }
