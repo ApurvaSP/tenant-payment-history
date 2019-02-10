@@ -1,6 +1,7 @@
 package com.home.tenants.controller;
 
 import com.home.tenants.controller.dtos.PaymentDTO;
+import com.home.tenants.controller.dtos.PaymentSearchDTO;
 import com.home.tenants.controller.dtos.UpdatePaymentDTO;
 import com.home.tenants.controller.mapper.PaymentMapper;
 import com.home.tenants.exceptions.ConstraintsViolationException;
@@ -12,6 +13,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.*;
@@ -110,6 +115,49 @@ public class PaymentControllerTest {
         when(paymentService.update(paymentId, toBeCreatedPaymentDAO)).thenThrow(EntityNotFoundException.class);
 
         paymentController.update(paymentId, requestUpdatePaymentDTO);
+    }
+
+    @Test
+    public void testSearchPayment() {
+        long contractId = 1;
+        Date current = new Date();
+        List<PaymentDAO> paymentDAOs = new ArrayList<>();
+        paymentDAOs.add(new PaymentDAO(1L, 12L, 40, "Rent paid", new Date(), false));
+        PaymentSearchDTO expectedSearchDTO = new PaymentSearchDTO(paymentDAOs);
+        when(paymentService.search(contractId, current, current)).thenReturn(paymentDAOs);
+        when(paymentMapper.makePaymentSearchDTO(paymentDAOs)).thenReturn(expectedSearchDTO);
+
+        PaymentSearchDTO searchDTO = paymentController.search(contractId, current, current);
+        assertEquals(searchDTO.getItems(), paymentDAOs);
+        assertEquals(searchDTO.getSum().longValue(), 40L);
+    }
+
+    @Test
+    public void testSearchPaymentInvalidContractId() {
+        long contractId = 1;
+        Date current = new Date();
+        List<PaymentDAO> paymentDAOs = new ArrayList<>();
+        PaymentSearchDTO expectedSearchDTO = new PaymentSearchDTO(paymentDAOs);
+        when(paymentService.search(contractId, current, current)).thenReturn(paymentDAOs);
+        when(paymentMapper.makePaymentSearchDTO(paymentDAOs)).thenReturn(expectedSearchDTO);
+
+        PaymentSearchDTO searchDTO = paymentController.search(contractId, current, current);
+        assertEquals(searchDTO.getItems().size(), 0);
+        assertEquals(searchDTO.getSum().longValue(), 0);
+    }
+
+    @Test
+    public void testSearchPaymentTimeNotBetweenStartAndEndDate() {
+        long contractId = 1;
+        Date current = new Date();
+        List<PaymentDAO> paymentDAOs = new ArrayList<>();
+        PaymentSearchDTO expectedSearchDTO = new PaymentSearchDTO(paymentDAOs);
+        when(paymentService.search(contractId, current, current)).thenReturn(paymentDAOs);
+        when(paymentMapper.makePaymentSearchDTO(paymentDAOs)).thenReturn(expectedSearchDTO);
+
+        PaymentSearchDTO searchDTO = paymentController.search(contractId, current, current);
+        assertEquals(searchDTO.getItems().size(), 0);
+        assertEquals(searchDTO.getSum().longValue(), 0);
     }
 
 }

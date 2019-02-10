@@ -1,6 +1,8 @@
 package com.home.tenants.controller;
 
 import com.home.tenants.TenantsApplication;
+import com.home.tenants.TenantsApplicationTests;
+import com.home.tenants.controller.dtos.PaymentDTO;
 import com.home.tenants.repository.PaymentRepository;
 import com.home.tenants.repository.daos.PaymentDAO;
 import io.restassured.RestAssured;
@@ -13,17 +15,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = TenantsApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -212,6 +212,101 @@ public class PaymentControllerIntegrationTest {
                 .put("/payments/1")
                 .then()
                 .statusCode(400);
+    }
+
+    @Test
+    public void testSearch() {
+        Date current = new Date();
+        long contractId = 12L;
+        paymentRepository.save(new PaymentDAO(null, contractId, -5000, "Rent to be Paid", current, false));
+        paymentRepository.save(new PaymentDAO(null, contractId, 2000, "Rent Paid", current, false));
+        paymentRepository.save(new PaymentDAO(null, contractId, 1000, "Rent Paid", current, false));
+
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String startDate = simpleDateFormat.format(current);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(current);
+        calendar.add(Calendar.DATE, 5);
+        String endDate = simpleDateFormat.format(calendar.getTime());
+
+
+        List<PaymentDTO> payments = given()
+                .pathParam("contractId", contractId)
+                .queryParam("startDate", startDate)
+                .queryParam("endDate", endDate).
+                when()
+                .get("/contracts/{contractId}/payments")
+                .then()
+                .statusCode(200)
+                .body("sum", is(-2000))
+                .extract()
+                .path("items");
+        assertNotNull(payments);
+        assertEquals(payments.size(), 3);
+    }
+
+    @Test
+    public void testSearchForInvalidContractId() {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String startDate = simpleDateFormat.format(new Date());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, 5);
+        String endDate = simpleDateFormat.format(calendar.getTime());
+
+
+        List<PaymentDTO> payments = given()
+                .pathParam("contractId", 1221L)
+                .queryParam("startDate", startDate)
+                .queryParam("endDate", endDate).
+                        when()
+                .get("/contracts/{contractId}/payments")
+                .then()
+                .statusCode(200)
+                .body("sum", is(0))
+                .extract()
+                .path("items");
+        assertNotNull(payments);
+        assertEquals(payments.size(), 0);
+    }
+
+    @Test
+    public void testSearchInTimeOutOfStartAndEndDate() {
+        Date current = new Date();
+        long contractId = 123L;
+        paymentRepository.save(new PaymentDAO(null, contractId, -5000, "Rent to be Paid", current, false));
+        paymentRepository.save(new PaymentDAO(null, contractId, 2000, "Rent Paid", current, false));
+        paymentRepository.save(new PaymentDAO(null, contractId, 1000, "Rent Paid", current, false));
+
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(current);
+        calendar.add(Calendar.DATE, -15);
+        String startDate = simpleDateFormat.format(calendar.getTime());
+
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.setTime(current);
+        calendar1.add(Calendar.DATE, -10);
+        String endDate = simpleDateFormat.format(calendar1.getTime());
+
+
+        List<PaymentDTO> payments = given()
+                .pathParam("contractId", contractId)
+                .queryParam("startDate", startDate)
+                .queryParam("endDate", endDate).
+                        when()
+                .get("/contracts/{contractId}/payments")
+                .then()
+                .statusCode(200)
+                .body("sum", is(0))
+                .extract()
+                .path("items");
+        assertNotNull(payments);
+        assertEquals(payments.size(), 0);
     }
 
 

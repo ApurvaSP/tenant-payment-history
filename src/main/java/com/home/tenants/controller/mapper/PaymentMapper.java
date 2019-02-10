@@ -1,9 +1,13 @@
 package com.home.tenants.controller.mapper;
 
 import com.home.tenants.controller.dtos.PaymentDTO;
+import com.home.tenants.controller.dtos.PaymentSearchDTO;
 import com.home.tenants.controller.dtos.UpdatePaymentDTO;
 import com.home.tenants.repository.daos.PaymentDAO;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class PaymentMapper {
@@ -43,5 +47,13 @@ public class PaymentMapper {
                 paymentDAO.getIsDeleted()
         );
         return paymentDTO;
+    }
+
+    public List<PaymentDTO> makePaymentDTOs(List<PaymentDAO> paymentDAOs) {
+        return paymentDAOs.stream().map(this::makePaymentDTO).collect(Collectors.toList());
+    }
+
+    public PaymentSearchDTO makePaymentSearchDTO(List<PaymentDAO> paymentDAOs) {
+        return new PaymentSearchDTO(paymentDAOs);
     }
 }
