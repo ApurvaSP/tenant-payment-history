@@ -10,16 +10,6 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpdatePaymentDTO {
 
-    private UpdatePaymentDTO() {
-
-    }
-
-    public UpdatePaymentDTO(Integer value, String description, Date time) {
-        this.value = value;
-        this.description = description;
-        this.time = time;
-    }
-
     @NotNull
     private Integer value;
 

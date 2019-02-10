@@ -13,7 +13,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,14 +28,14 @@ public class PaymentController {
 
     @PostMapping("/payments")
     public PaymentDTO create(@Valid @RequestBody PaymentDTO paymentDto) throws ConstraintsViolationException {
-        PaymentDAO payment = paymentService.save(paymentMapper.makePaymentDAO(paymentDto));
-        return paymentMapper.makePaymentDTO(payment);
+        PaymentDAO paymentDAO = paymentService.save(paymentMapper.makePaymentDAO(paymentDto));
+        return paymentMapper.makePaymentDTO(paymentDAO);
     }
 
     @GetMapping("/payments/{paymentId}")
     public PaymentDTO get(@PathVariable Long paymentId) throws EntityNotFoundException {
-        PaymentDAO payment = paymentService.get(paymentId);
-        return paymentMapper.makePaymentDTO(payment);
+        PaymentDAO paymentDAO = paymentService.get(paymentId);
+        return paymentMapper.makePaymentDTO(paymentDAO);
     }
 
     @DeleteMapping("/payments/{paymentId}")

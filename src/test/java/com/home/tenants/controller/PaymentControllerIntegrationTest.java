@@ -1,7 +1,6 @@
 package com.home.tenants.controller;
 
 import com.home.tenants.TenantsApplication;
-import com.home.tenants.TenantsApplicationTests;
 import com.home.tenants.controller.dtos.PaymentDTO;
 import com.home.tenants.repository.PaymentRepository;
 import com.home.tenants.repository.daos.PaymentDAO;
@@ -16,7 +15,6 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
 import java.util.*;
 
 import static io.restassured.RestAssured.given;
@@ -235,7 +233,7 @@ public class PaymentControllerIntegrationTest {
                 .pathParam("contractId", contractId)
                 .queryParam("startDate", startDate)
                 .queryParam("endDate", endDate).
-                when()
+                        when()
                 .get("/contracts/{contractId}/payments")
                 .then()
                 .statusCode(200)

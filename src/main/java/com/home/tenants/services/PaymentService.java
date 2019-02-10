@@ -23,12 +23,12 @@ public class PaymentService {
     private static final Logger LOG = LoggerFactory.getLogger(PaymentService.class);
 
     @Transactional
-    public PaymentDAO save(PaymentDAO payment) throws ConstraintsViolationException {
-        payment.setId(null);
+    public PaymentDAO save(PaymentDAO paymentDAO) throws ConstraintsViolationException {
+        paymentDAO.setId(null);
         try {
-            return paymentRepository.save(payment);
+            return paymentRepository.save(paymentDAO);
         } catch (DataIntegrityViolationException dive) {
-            LOG.warn("ConstraintsViolationException while creating a payment: {}", payment, dive);
+            LOG.warn("ConstraintsViolationException while creating a paymentDAO: {}", paymentDAO, dive);
             throw new ConstraintsViolationException(dive.getMessage());
         }
     }
@@ -52,7 +52,6 @@ public class PaymentService {
         paymentDAO.setDescription(payment.getDescription());
         paymentDAO.setValue(payment.getValue());
         paymentDAO.setTime(payment.getTime());
-        // Update updatedAt to current time
         paymentDAO.setUpdatedAt(new Date());
         return paymentDAO;
     }

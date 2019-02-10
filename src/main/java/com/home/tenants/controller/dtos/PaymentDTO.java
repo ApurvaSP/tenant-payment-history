@@ -10,10 +10,6 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaymentDTO {
 
-    private PaymentDTO() {
-
-    }
-
     public PaymentDTO(Long id, Long contractId, Integer value, String description, Date time, Date createdAt, Date updatedAt, Boolean isImported, Boolean isDeleted) {
         this.id = id;
         this.contractId = contractId;
