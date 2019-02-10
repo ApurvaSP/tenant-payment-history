@@ -3,6 +3,7 @@ package com.home.tenants.controller.dtos;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -18,6 +19,7 @@ public class UpdatePaymentDTO {
         this.time = time;
     }
 
+    @NotNull
     private Integer value;
 
     @NotBlank

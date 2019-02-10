@@ -84,6 +84,20 @@ public class PaymentControllerIntegrationTest {
     }
 
     @Test
+    public void testCreatePaymentFailureIfValueIsNull() {
+        Map<String, Object> paymentRequest = paymentRequest(null, 1234L);
+        paymentRequest.put("value", null);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(paymentRequest).
+                when()
+                .post("/payments")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
     public void testCreatePaymentFailureIfDescriptionIsEmpty() {
         given()
                 .contentType(ContentType.JSON)
@@ -176,11 +190,24 @@ public class PaymentControllerIntegrationTest {
                 .put("/payments/1")
                 .then()
                 .statusCode(400);
-    }@Test
+    }
+
+    @Test
     public void testUpdatePaymentFailureWithEmptyDescription() {
         given()
                 .contentType(ContentType.JSON)
                 .body(updatePaymentRequest("", 12L, new Date())).
+                when()
+                .put("/payments/1")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    public void testUpdatePaymentFailureWithNullValue() {
+        given()
+                .contentType(ContentType.JSON)
+                .body(updatePaymentRequest("Rent paid", null, new Date())).
                 when()
                 .put("/payments/1")
                 .then()

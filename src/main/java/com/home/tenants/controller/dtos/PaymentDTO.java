@@ -29,6 +29,8 @@ public class PaymentDTO {
 
     @NotNull
     private Long contractId;
+
+    @NotNull
     private Integer value;
 
     @NotBlank
