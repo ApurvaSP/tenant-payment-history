@@ -11,7 +11,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class PaymentService {
@@ -53,5 +55,9 @@ public class PaymentService {
         // Update updatedAt to current time
         paymentDAO.setUpdatedAt(new Date());
         return paymentDAO;
+    }
+
+    public List<PaymentDAO> search(long contractId, Date startDate, Date endDate) {
+        return paymentRepository.findByContractIdAndTimeBetween(contractId, startDate, endDate);
     }
 }

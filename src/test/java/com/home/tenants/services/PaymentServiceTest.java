@@ -11,7 +11,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -91,5 +93,15 @@ public class PaymentServiceTest {
     public void testUpdatePaymentFailure() throws EntityNotFoundException {
         when(paymentRepository.findById(1234L)).thenReturn(Optional.empty());
         paymentService.update(1234L, any(PaymentDAO.class));
+    }
+
+    @Test
+    public void testSearch() {
+        long contractId = 1;
+        Date current = new Date();
+        List<PaymentDAO> paymentDAOs = new ArrayList<>();
+        when(paymentRepository.findByContractIdAndTimeBetween(contractId, current, current)).thenReturn(paymentDAOs);
+        List<PaymentDAO> searchedPaymentDAOs = paymentService.search(contractId, current, current);
+        assertEquals(searchedPaymentDAOs, paymentDAOs);
     }
 }
