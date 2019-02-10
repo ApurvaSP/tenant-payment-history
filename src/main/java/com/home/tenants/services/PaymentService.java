@@ -11,7 +11,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +24,7 @@ public class PaymentService {
 
     @Transactional
     public PaymentDAO save(PaymentDAO payment) throws ConstraintsViolationException {
+        payment.setId(null);
         try {
             return paymentRepository.save(payment);
         } catch (DataIntegrityViolationException dive) {
