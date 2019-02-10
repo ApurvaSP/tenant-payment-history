@@ -1,6 +1,7 @@
 package com.home.tenants.controller;
 
 import com.home.tenants.controller.dtos.PaymentDTO;
+import com.home.tenants.controller.dtos.UpdatePaymentDTO;
 import com.home.tenants.controller.mapper.PaymentMapper;
 import com.home.tenants.exceptions.ConstraintsViolationException;
 import com.home.tenants.exceptions.EntityNotFoundException;
@@ -81,6 +82,34 @@ public class PaymentControllerTest {
     public void testDeletePaymentFailure() throws EntityNotFoundException {
         doThrow(EntityNotFoundException.class).when(paymentService).delete(1234L);
         paymentController.delete(1234L);
+    }
+
+    @Test
+    public void testUpdatePayment() throws EntityNotFoundException {
+        long paymentId = 1;
+        UpdatePaymentDTO requestUpdatePaymentDTO = mock(UpdatePaymentDTO.class);
+        PaymentDAO toBeCreatedPaymentDAO = mock(PaymentDAO.class);
+        PaymentDAO updatedPaymentDAO = mock(PaymentDAO.class);
+        PaymentDTO responsePaymentDTO = mock(PaymentDTO.class);
+
+        when(paymentMapper.makePaymentDAOFromUpdateDTO(requestUpdatePaymentDTO)).thenReturn(toBeCreatedPaymentDAO);
+        when(paymentService.update(paymentId, toBeCreatedPaymentDAO)).thenReturn(updatedPaymentDAO);
+        when(paymentMapper.makePaymentDTO(updatedPaymentDAO)).thenReturn(responsePaymentDTO);
+
+        PaymentDTO actualPaymentDTO = paymentController.update(paymentId, requestUpdatePaymentDTO);
+        assertEquals(actualPaymentDTO, responsePaymentDTO);
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testUpdatePaymentFailure() throws EntityNotFoundException {
+        long paymentId = 1;
+        UpdatePaymentDTO requestUpdatePaymentDTO = mock(UpdatePaymentDTO.class);
+        PaymentDAO toBeCreatedPaymentDAO = mock(PaymentDAO.class);
+
+        when(paymentMapper.makePaymentDAOFromUpdateDTO(requestUpdatePaymentDTO)).thenReturn(toBeCreatedPaymentDAO);
+        when(paymentService.update(paymentId, toBeCreatedPaymentDAO)).thenThrow(EntityNotFoundException.class);
+
+        paymentController.update(paymentId, requestUpdatePaymentDTO);
     }
 
 }

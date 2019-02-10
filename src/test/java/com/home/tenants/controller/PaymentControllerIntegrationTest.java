@@ -73,7 +73,7 @@ public class PaymentControllerIntegrationTest {
     }
 
     @Test
-    public void testCreatePaymentFailureShouldFailIfDescriptionIsNull() {
+    public void testCreatePaymentFailureIfDescriptionIsNull() {
         given()
                 .contentType(ContentType.JSON)
                 .body(paymentRequest(null, 1234L)).
@@ -118,12 +118,12 @@ public class PaymentControllerIntegrationTest {
 
     @Test
     public void testDeletePayment() {
-        PaymentDAO payment = new PaymentDAO(null,1234L, 100, "Rent Paid", new Date(), false );
+        PaymentDAO payment = new PaymentDAO(null, 1234L, 100, "Rent Paid", new Date(), false);
         paymentRepository.save(payment);
 
         given()
                 .pathParam("paymentId", payment.getId()).
-        when()
+                when()
                 .delete("/payments/{paymentId}")
                 .then()
                 .statusCode(200);
@@ -134,6 +134,55 @@ public class PaymentControllerIntegrationTest {
     public void testDeletePaymentFailureWithInvalidId() {
         when()
                 .delete("/payments/13232")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    public void testUpdatePayment() {
+        PaymentDAO payment = new PaymentDAO(null, 1234L, 100, "Rent Paid", new Date(), false);
+        paymentRepository.save(payment);
+        Date now = new Date();
+        given()
+                .contentType(ContentType.JSON)
+                .body(updatePaymentRequest("Rent to be paid", 12L, now))
+                .pathParam("paymentId", payment.getId()).
+                when()
+                .put("/payments/{paymentId}")
+                .then()
+                .statusCode(200)
+                .body("id", is(notNullValue()))
+                .body("value", is(12))
+                .body("description", is("Rent to be paid"));
+    }
+
+    @Test
+    public void testUpdatePaymentFailureWithInvalidId() {
+        given()
+                .contentType(ContentType.JSON)
+                .body(updatePaymentRequest("Rent paid", 12L, new Date())).
+                when()
+                .put("/payments/13232")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    public void testUpdatePaymentFailureWithNullDescription() {
+        given()
+                .contentType(ContentType.JSON)
+                .body(updatePaymentRequest(null, 12L, new Date())).
+                when()
+                .put("/payments/1")
+                .then()
+                .statusCode(400);
+    }@Test
+    public void testUpdatePaymentFailureWithEmptyDescription() {
+        given()
+                .contentType(ContentType.JSON)
+                .body(updatePaymentRequest("", 12L, new Date())).
+                when()
+                .put("/payments/1")
                 .then()
                 .statusCode(400);
     }
@@ -149,6 +198,14 @@ public class PaymentControllerIntegrationTest {
         paymentRequest.put("updatedAt", now);
         paymentRequest.put("time", now);
         paymentRequest.put("isImported", true);
+        return paymentRequest;
+    }
+
+    private Map<String, Object> updatePaymentRequest(String description, Long value, Date time) {
+        Map<String, Object> paymentRequest = new HashMap<>();
+        paymentRequest.put("value", value);
+        paymentRequest.put("description", description);
+        paymentRequest.put("time", time);
         return paymentRequest;
     }
 
