@@ -37,6 +37,7 @@ public class PaymentDTO {
     @NotBlank
     private String description;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date time;
     private Date createdAt;
     private Date updatedAt;

@@ -1,5 +1,6 @@
 package com.home.tenants.controller.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.validation.constraints.NotBlank;
@@ -25,6 +26,7 @@ public class UpdatePaymentDTO {
     @NotBlank
     private String description;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date time;
 
     public Integer getValue() {
