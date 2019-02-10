@@ -21,6 +21,10 @@ public class PaymentDAO {
         this.time = time;
     }
 
+    public PaymentDAO(Integer value, String description, Date time) {
+        this(null, null, value, description, time, null);
+    }
+
     private PaymentDAO() {
 
     }

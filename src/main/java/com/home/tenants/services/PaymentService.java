@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 
 @Service
 public class PaymentService {
@@ -41,5 +42,16 @@ public class PaymentService {
     public void delete(long paymentId) throws EntityNotFoundException {
         PaymentDAO paymentDAO = get(paymentId);
         paymentDAO.setIsDeleted(true);
+    }
+
+    @Transactional
+    public PaymentDAO update(long paymentId, PaymentDAO payment) throws EntityNotFoundException {
+        PaymentDAO paymentDAO = get(paymentId);
+        paymentDAO.setDescription(payment.getDescription());
+        paymentDAO.setValue(payment.getValue());
+        paymentDAO.setTime(payment.getTime());
+        // Update updatedAt to current time
+        paymentDAO.setUpdatedAt(new Date());
+        return paymentDAO;
     }
 }

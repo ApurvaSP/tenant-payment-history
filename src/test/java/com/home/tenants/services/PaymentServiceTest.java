@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -72,5 +73,23 @@ public class PaymentServiceTest {
         paymentService.delete(1234L);
     }
 
+    @Test
+    public void testUpdatePayment() throws EntityNotFoundException {
+        PaymentDAO paymentDAO = mock(PaymentDAO.class);
+        Date current = new Date();
+        when(paymentDAO.getDescription()).thenReturn("Rent paid");
+        when(paymentDAO.getValue()).thenReturn(1);
+        when(paymentDAO.getTime()).thenReturn(current);
+        when(paymentRepository.findById(1234L)).thenReturn(Optional.of(paymentDAO));
+        paymentService.update(1234L, paymentDAO);
+        verify(paymentDAO).setDescription("Rent paid");
+        verify(paymentDAO).setValue(1);
+        verify(paymentDAO).setTime(current);
+    }
 
+    @Test(expected = EntityNotFoundException.class)
+    public void testUpdatePaymentFailure() throws EntityNotFoundException {
+        when(paymentRepository.findById(1234L)).thenReturn(Optional.empty());
+        paymentService.update(1234L, any(PaymentDAO.class));
+    }
 }

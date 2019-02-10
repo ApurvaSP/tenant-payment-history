@@ -1,6 +1,7 @@
 package com.home.tenants.controller.mapper;
 
 import com.home.tenants.controller.dtos.PaymentDTO;
+import com.home.tenants.controller.dtos.UpdatePaymentDTO;
 import com.home.tenants.repository.daos.PaymentDAO;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,15 @@ public class PaymentMapper {
                 paymentDto.getDescription(),
                 paymentDto.getTime(),
                 paymentDto.getIsImported()
+        );
+        return paymentDAO;
+    }
+
+    public PaymentDAO makePaymentDAOFromUpdateDTO(UpdatePaymentDTO paymentDto) {
+        PaymentDAO paymentDAO = new PaymentDAO(
+                paymentDto.getValue(),
+                paymentDto.getDescription(),
+                paymentDto.getTime()
         );
         return paymentDAO;
     }
