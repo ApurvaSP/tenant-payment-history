@@ -5,13 +5,13 @@ This API can be used landlords to manage their apartments. Via the app, landlord
 
 Various APIs to create / update / get / delete a payment history of a contract are provided.
 
-## To build the application :
+## To build the application
 mvn clean install
 
-## To run the application :
+## To run the application
 mvn spring-boot:run
 
-## APIs and their usages :
+## APIs and their usages
 | API Path | HTTP Method | Description |
 | -- | -- | -- |
 | /payments | POST | Creates a payment history for a specific contract |
