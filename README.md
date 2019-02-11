@@ -1,5 +1,4 @@
 # tenant-payment-history
-REST API to fetch / update / create / delete tenant payment history.
 
 This API can be used landlords to manage their apartments. Via the app, landlords are able to see details about their rental contracts, check which tenants have paid the rent, and send reminders to tenants when rent is overdue. 
 
