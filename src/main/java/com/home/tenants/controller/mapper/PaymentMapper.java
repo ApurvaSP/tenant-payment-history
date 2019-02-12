@@ -49,10 +49,6 @@ public class PaymentMapper {
         return paymentDTO;
     }
 
-    public List<PaymentDTO> makePaymentDTOs(List<PaymentDAO> paymentDAOs) {
-        return paymentDAOs.stream().map(this::makePaymentDTO).collect(Collectors.toList());
-    }
-
     public PaymentSearchDTO makePaymentSearchDTO(List<PaymentDAO> paymentDAOs) {
         return new PaymentSearchDTO(paymentDAOs);
     }
