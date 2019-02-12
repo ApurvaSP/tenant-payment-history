@@ -1,15 +1,14 @@
 package com.home.tenants.repository.daos;
 
+import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Entity
-@Table(
-        name = "payment"
-)
+@Where(clause="is_deleted=0")
+@Table(name = "payment")
 public class PaymentDAO {
 
     public PaymentDAO(Long id, Long contractId, Integer value, String description, Date time, Boolean isImported) {

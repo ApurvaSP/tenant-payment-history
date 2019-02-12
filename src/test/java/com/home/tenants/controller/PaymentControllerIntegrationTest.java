@@ -2,6 +2,7 @@ package com.home.tenants.controller;
 
 import com.home.tenants.TenantsApplication;
 import com.home.tenants.controller.dtos.PaymentDTO;
+import com.home.tenants.exceptions.EntityNotFoundException;
 import com.home.tenants.repository.PaymentRepository;
 import com.home.tenants.repository.daos.PaymentDAO;
 import io.restassured.RestAssured;
@@ -139,7 +140,8 @@ public class PaymentControllerIntegrationTest {
                 .delete("/payments/{paymentId}")
                 .then()
                 .statusCode(200);
-        assertTrue(paymentRepository.findById(payment.getId()).get().getIsDeleted());
+        Optional<PaymentDAO> deletedEntity = paymentRepository.findById(payment.getId());
+        assertEquals(deletedEntity, Optional.empty());
     }
 
     @Test
