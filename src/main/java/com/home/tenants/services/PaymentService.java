@@ -17,10 +17,14 @@ import java.util.List;
 @Service
 public class PaymentService {
 
-    @Autowired
-    private PaymentRepository paymentRepository;
+    private final PaymentRepository paymentRepository;
 
     private static final Logger LOG = LoggerFactory.getLogger(PaymentService.class);
+
+    @Autowired
+    public PaymentService(PaymentRepository paymentRepository) {
+        this.paymentRepository = paymentRepository;
+    }
 
     @Transactional
     public PaymentDAO save(PaymentDAO paymentDAO) throws ConstraintsViolationException {
@@ -36,7 +40,7 @@ public class PaymentService {
     @Transactional
     public PaymentDAO get(long paymentId) throws EntityNotFoundException {
         return paymentRepository.findById(paymentId).
-                orElseThrow(() -> new EntityNotFoundException("Could not find entity with id: " + paymentId));
+                orElseThrow(() -> new EntityNotFoundException("Could not find entity with id " + paymentId));
 
     }
 

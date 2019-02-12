@@ -7,13 +7,12 @@ import com.home.tenants.repository.daos.PaymentDAO;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class PaymentMapper {
 
     public PaymentDAO makePaymentDAO(PaymentDTO paymentDto) {
-        PaymentDAO paymentDAO = new PaymentDAO(
+        return new PaymentDAO(
                 paymentDto.getId(),
                 paymentDto.getContractId(),
                 paymentDto.getValue(),
@@ -21,21 +20,19 @@ public class PaymentMapper {
                 paymentDto.getTime(),
                 paymentDto.getIsImported()
         );
-        return paymentDAO;
     }
 
     public PaymentDAO makePaymentDAOFromUpdateDTO(UpdatePaymentDTO paymentDto) {
-        PaymentDAO paymentDAO = new PaymentDAO(
+        return new PaymentDAO(
                 paymentDto.getValue(),
                 paymentDto.getDescription(),
                 paymentDto.getTime()
         );
-        return paymentDAO;
     }
 
     public PaymentDTO makePaymentDTO(PaymentDAO paymentDAO) {
 
-        PaymentDTO paymentDTO = new PaymentDTO(
+        return new PaymentDTO(
                 paymentDAO.getId(),
                 paymentDAO.getContractId(),
                 paymentDAO.getValue(),
@@ -46,7 +43,6 @@ public class PaymentMapper {
                 paymentDAO.getIsImported(),
                 paymentDAO.getIsDeleted()
         );
-        return paymentDTO;
     }
 
     public PaymentSearchDTO makePaymentSearchDTO(List<PaymentDAO> paymentDAOs) {

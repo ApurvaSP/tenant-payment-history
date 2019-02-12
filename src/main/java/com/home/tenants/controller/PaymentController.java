@@ -20,11 +20,15 @@ import java.util.List;
 @RequestMapping
 public class PaymentController {
 
-    @Autowired
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
+
+    private final PaymentMapper paymentMapper;
 
     @Autowired
-    private PaymentMapper paymentMapper;
+    public PaymentController(PaymentService paymentService, PaymentMapper paymentMapper) {
+        this.paymentService = paymentService;
+        this.paymentMapper = paymentMapper;
+    }
 
     @PostMapping("/payments")
     public PaymentDTO create(@Valid @RequestBody PaymentDTO paymentDto) throws ConstraintsViolationException {

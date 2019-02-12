@@ -12,8 +12,7 @@ public class PaymentSearchDTO {
     }
 
     public Long getSum() {
-        return items.stream().mapToLong(dto ->
-                dto.getValue()).sum();
+        return items.stream().mapToLong(PaymentDAO::getValue).sum();
     }
 
     public List<PaymentDAO> getItems() {
